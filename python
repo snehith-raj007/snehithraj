@@ -1,0 +1,78 @@
+def add():
+    name = input("Enter contact name: ")
+    phone = input("Enter contact number: ")
+    with open("contacts.txt", "a") as file:
+        file.write(f"{name},{phone}\n")
+    print("Contact has been saved!")
+
+def view():
+    print("------------CONTACT LIST-------------")
+    try:
+        with open("contacts.txt", "r") as file:
+            lines = file.readlines()
+            if not lines:
+                print("No contacts found!")
+            else:
+                for line in lines:
+                    name, phone = line.strip().split(",")
+                    print(f"Name: {name}, Phone Number: {phone}")
+    except FileNotFoundError:
+        print("No contact file found!")
+
+def search():
+    sarch = input("Enter the contact name to search: ")
+    found = False
+    try:
+        with open("contacts.txt", "r") as file:
+            for line in file:
+                name, phone = line.strip().split(",")
+                if name.lower() == sarch.lower():
+                    print(f"{name} - {phone}")
+                    found = True
+                    break
+        if not found:
+            print("Contact not found.")
+    except FileNotFoundError:
+        print("No contact file found!")
+
+def delet():
+    delt = input("Enter the contact name to delete: ")
+    found = False
+    try:
+        with open("contacts.txt", "r") as file:
+            lines = file.readlines()
+        with open("contacts.txt", "w") as file:
+            for line in lines:
+                name, phone = line.strip().split(',')
+                if name.lower() != delt.lower():
+                    file.write(line)
+                else:
+                    found = True
+        if found:
+            print(f"Contact '{delt}' deleted successfully.")
+        else:
+            print("Contact not found.")
+    except FileNotFoundError:
+        print("No contact file found!")
+
+while True:
+    print("\n====== CONTACT BOOK ======")
+    print("1. Add contact")
+    print("2. View contacts")
+    print("3. Search contact")
+    print("4. Delete contact")
+    print("5. Exit")
+    choice = input("Enter your choice (1-5): ")
+    if choice == '1':
+        add()
+    elif choice == '2':
+        view()
+    elif choice == '3':
+        search()
+    elif choice == '4':
+        delet()
+    elif choice == '5':
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice! Try again.")
